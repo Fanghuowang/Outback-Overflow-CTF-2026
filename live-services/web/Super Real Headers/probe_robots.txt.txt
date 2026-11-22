@@ -1,0 +1,8 @@
+GET /robots.txt -> 200
+Content-Type: text/plain; charset=utf-8
+
+User-agent: *
+Disallow: /
+
+# Nothing hidden here, but checking robots.txt is a good habit.
+# Hint: this challenge is all about what YOU send, not what the server hides.

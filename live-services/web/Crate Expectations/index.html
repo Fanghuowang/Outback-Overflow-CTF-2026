@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PageScope - URL Preview Service</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0f; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+        h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #ff6b35; }
+        .subtitle { color: #888; margin-bottom: 2rem; font-size: 0.9rem; }
+        .input-group { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+        input[type="url"] {
+            flex: 1; padding: 0.75rem 1rem; background: #1a1a2e; border: 1px solid #333;
+            border-radius: 8px; color: #e0e0e0; font-size: 1rem; outline: none;
+        }
+        input[type="url"]:focus { border-color: #ff6b35; }
+        button {
+            padding: 0.75rem 1.5rem; background: #ff6b35; color: #fff; border: none;
+            border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;
+        }
+        button:hover { background: #e55a2b; }
+        button:disabled { background: #555; cursor: not-allowed; }
+        .result { background: #1a1a2e; border: 1px solid #333; border-radius: 8px; padding: 1.5rem; margin-top: 1rem; }
+        .result h3 { color: #ff6b35; margin-bottom: 0.5rem; }
+        .meta { color: #888; font-size: 0.85rem; margin-bottom: 1rem; }
+        .preview { background: #0d0d1a; padding: 1rem; border-radius: 4px; font-family: monospace; font-size: 0.8rem; white-space: pre-wrap; word-break: break-all; max-height: 400px; overflow-y: auto; color: #aaa; }
+        .error { background: #2a1a1a; border-color: #662222; color: #ff6666; }
+        .spinner { display: none; color: #ff6b35; }
+        .footer { margin-top: 3rem; color: #444; font-size: 0.75rem; text-align: center; }
+        .badge { display: inline-block; background: #1a2a1a; color: #66aa66; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>&#x1f50d; PageScope</h1>
+        <p class="subtitle">Fast URL metadata preview &amp; analysis &mdash; powered by <span class="badge">webpage-rs 2.0.1</span></p>
+
+        <div class="input-group">
+            <input type="url" id="url" placeholder="https://example.com" autofocus>
+            <button id="fetch-btn" onclick="fetchPreview()">Preview</button>
+        </div>
+
+        <div id="result"></div>
+
+        <div class="footer">
+            <p>PageScope v1.2.0 &bull; Engine: webpage-rs/2.0.1 (libcurl) &bull; Security: URL validation active</p>
+            <p style="margin-top:4px">Only HTTP and HTTPS schemes are permitted. Private IP ranges are blocked.</p>
+        </div>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('url');
+        const fetchBtn = document.getElementById('fetch-btn');
+        const resultDiv = document.getElementById('result');
+
+        urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') fetchPreview(); });
+
+        async function fetchPreview() {
+            const url = urlInput.value.trim();
+            if (!url) return;
+
+            fetchBtn.disabled = true;
+            fetchBtn.textContent = 'Fetching...';
+            resultDiv.innerHTML = '';
+
+            try {
+                const resp = await fetch('/api/preview', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+
+                const data = await resp.json();
+
+                if (!resp.ok) {
+                    resultDiv.innerHTML = `<div class="result error"><h3>&#x26a0; Error</h3><p>${escapeHtml(data.error || 'Unknown error')}</p></div>`;
+                    return;
+                }
+
+                let html = `<div class="result">`;
+                html += `<h3>${escapeHtml(data.title || 'No title')}</h3>`;
+                html += `<div class="meta">`;
+                html += `<strong>URL:</strong> ${escapeHtml(data.effective_url || data.url)}<br>`;
+                html += `<strong>Status:</strong> ${data.status_code} &bull; <strong>Type:</strong> ${escapeHtml(data.content_type || 'unknown')}`;
+                if (data.description) html += `<br><strong>Description:</strong> ${escapeHtml(data.description)}`;
+                html += `</div>`;
+                if (data.preview) {
+                    html += `<div class="preview">${escapeHtml(data.preview)}</div>`;
+                }
+                html += `</div>`;
+
+                resultDiv.innerHTML = html;
+            } catch (e) {
+                resultDiv.innerHTML = `<div class="result error"><h3>&#x26a0; Network Error</h3><p>${escapeHtml(e.message)}</p></div>`;
+            } finally {
+                fetchBtn.disabled = false;
+                fetchBtn.textContent = 'Preview';
+            }
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

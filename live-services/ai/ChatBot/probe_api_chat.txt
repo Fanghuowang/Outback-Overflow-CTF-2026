@@ -1,0 +1,4 @@
+POST /api/chat -> 200
+Content-Type: application/json
+
+{"reply":"Hello! 😊 How can I assist you today? Whether it's a word game, puzzle, or anything else fun, I'm here to help!"}

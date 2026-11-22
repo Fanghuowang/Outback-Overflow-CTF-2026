@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>URL Checker // OutbackCorp Internal Tools</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; color: #eee; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+        h1 { color: #e74c3c; margin-bottom: 10px; }
+        .subtitle { color: #888; margin-bottom: 30px; font-size: 0.95em; }
+        form { display: flex; gap: 10px; margin-bottom: 30px; width: 100%%; max-width: 600px; }
+        input[type=text] { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid #333; background: #16213e; color: #eee; font-size: 1em; }
+        button { padding: 12px 24px; border-radius: 6px; border: none; background: #e74c3c; color: #fff; font-size: 1em; cursor: pointer; }
+        button:hover { background: #c0392b; }
+        .result { background: #16213e; border: 1px solid #333; border-radius: 8px; padding: 20px; width: 100%%; max-width: 600px; white-space: pre-wrap; word-break: break-all; max-height: 400px; overflow-y: auto; }
+        .error { border-color: #e74c3c; color: #e74c3c; }
+        footer { margin-top: auto; padding-top: 40px; color: #444; font-size: 0.8em; }
+    </style>
+</head>
+<body>
+    <!-- debug: /status -->
+    <h1>URL Checker</h1>
+    <p class="subtitle">Paste a URL to check if the service is responding.</p>
+    <form method="POST">
+        <input type="text" name="url" placeholder="https://example.com" value="">
+        <button type="submit">Check</button>
+    </form>
+    
+    <footer>OutbackCorp Internal Tools v1.0</footer>
+</body>
+</html>

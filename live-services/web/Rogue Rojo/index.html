@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>No Place Like 127.0.0.1</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #0a0a0a;
+      color: #00ff41;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      border: 1px solid #00ff41;
+      padding: 2rem;
+    }
+    h1 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .subtitle { color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .info {
+      background: #111;
+      border-left: 3px solid #00ff41;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .info code { color: #ff6; }
+    form { display: flex; gap: 0.5rem; }
+    input[type="url"] {
+      flex: 1;
+      background: #111;
+      border: 1px solid #333;
+      color: #00ff41;
+      padding: 0.6rem 0.8rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+    input[type="url"]:focus { outline: none; border-color: #00ff41; }
+    button {
+      background: #00ff41;
+      color: #0a0a0a;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-family: inherit;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #00cc33; }
+    .status { margin-top: 1rem; font-size: 0.85rem; min-height: 1.2rem; }
+    .error { color: #ff4444; }
+    .success { color: #00ff41; }
+    .queue-info { color: #888; font-size: 0.75rem; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>&gt; No Place Like 127.0.0.1</h1>
+    <p class="subtitle">Admin Bot Submission Portal</p>
+    <div class="info">
+      A developer left <code>rojo serve</code> running on their machine.<br>
+      The dev server API is on <code>127.0.0.1:34872</code>.<br>
+      Submit a URL and the developer will visit it.
+    </div>
+    <form id="form" method="POST" action="/submit">
+      <input type="url" name="url" placeholder="https://your-exploit.example.com/page" required>
+      <button type="submit">SEND</button>
+    </form>
+    <div class="status" id="status"></div>
+    <div class="queue-info" id="queue"></div>
+  </div>
+  <script>
+    const form = document.getElementById('form');
+    const status = document.getElementById('status');
+    const qinfo = document.getElementById('queue');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.className = 'status';
+      status.textContent = 'Submitting...';
+      try {
+        const res = await fetch('/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: form.url.value }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          status.className = 'status success';
+          status.textContent = data.message;
+          qinfo.textContent = 'Position in queue: ' + data.position;
+        } else {
+          status.className = 'status error';
+          status.textContent = data.error || 'Submission failed';
+          qinfo.textContent = '';
+        }
+      } catch (err) {
+        status.className = 'status error';
+        status.textContent = 'Network error';
+      }
+    });
+  </script>
+</body>
+</html>
