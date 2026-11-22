@@ -3,6 +3,8 @@
 Scraped from https://ctf.hscyber.org/challenges
 Total: 62 challenges
 
+See [LIVE_SERVICES.md](LIVE_SERVICES.md) for client-side mirrors of the 9 challenges that have no source file but run a live service (stored in each challenge's `live/` folder).
+
 ## Ai (1)
 
 | Challenge | Points | Tags | Files |
