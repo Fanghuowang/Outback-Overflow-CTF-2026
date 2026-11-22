@@ -1,0 +1,23 @@
+# Spinning State
+
+- **Category:** rev
+- **Points:** 200
+- **Difficulty tags:** medium
+- **Author:** Sphynx
+- **Solves:** 101
+
+## Description
+
+A flag checker written in a language you've probably never seen before.
+Every byte is scrambled by a small cipher whose key depends on everything
+that came before it. Can you turn the 41 expected bytes back into the flag?
+
+Flag format: `OO{...}`
+
+## Hints
+
+- The state update only depends on the previous state and the OUTPUT byte, which you already know.
+
+## Provided files
+
+- rev_3.ll

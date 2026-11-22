@@ -1,0 +1,18 @@
+# Amnesiac's Offset
+
+- **Category:** crypto
+- **Points:** 100
+- **Difficulty tags:** n/a
+- **Author:** unknown
+- **Solves:** 47
+
+## Description
+
+Help! I accidentally dumped 1999 fake flags into the system alongside the real one and forgot what number it is! Luckily I locked the real flag’s line number in my lucky XOR python file before the amnesia hit - unfortunately I don’t remember the key…
+
+Note: Do not brute-force or script automated flag submissions against the CTF infrastructure—there are 2,000 decoy flags for a reason.
+
+## Provided files
+
+- flag_ideas.txt
+- dont-forget.py

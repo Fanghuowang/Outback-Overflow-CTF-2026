@@ -1,0 +1,20 @@
+# A Trip Down Memory Lane
+
+- **Category:** osint
+- **Points:** 75
+- **Difficulty tags:** n/a
+- **Author:** unknown
+- **Solves:** 49
+
+## Description
+
+I remember when I was younger, I used to take the exact same train route through Adelaide every morning. I’ve always had an eye for art, so I remember the street art at the stop I’d get on and the stop I’d get off. I’ve described it below. Can you find it for me?
+ Enter the flag as the number of the train line e.g. OO{oxfordline}
+
+## Hints
+
+- The artist who did the murals at the first station, his last name was Sanders
+
+## Provided files
+
+- A_Trip_Down_Memory_Lane.txt
